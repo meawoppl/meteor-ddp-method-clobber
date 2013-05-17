@@ -184,7 +184,7 @@ class DDPClient(WebSocketClient):
         """Called when the connection is closed"""
         print('* CONNECTION CLOSED {0} ({1})'.format(code, reason))
     def received_message(self, data):
-        if self.debugPrint: 
+        if self.debugPrint:
             print('RAW From Server: {}'.format(data))
             sys.stdout.flush()
 
@@ -234,7 +234,7 @@ class DDPClient(WebSocketClient):
     def _sendDict(self, msgDict):
         """Send a python dict formatted to json to the ws endpoint"""
         message = json.dumps(msgDict)
-        if self.debugPrint: 
+        if self.debugPrint:
             print("RAW To server:" + message)
         self.send(message)
 
@@ -356,19 +356,14 @@ class DDPClient(WebSocketClient):
 
 
 if __name__ == "__main__":
-    ddpc = DDPClient("ws://192.168.1.30:3000/websocket", debugPrint=True)
+    ddpc = DDPClient("ws://127.0.0.1:3000/websocket", debugPrint=True)
     ddpc.connectDDP()
 
-    # Subscribe to properties
-    subID = ddpc.subscribe("all-properties")
-    ddpc.getResult(subID)
-
-    # Get a reactive dict like object from the collection
-    xPosition = ddpc.collections.prop.findOne({"property":"stage.x.position"})
-
-    # Reactivley get and set values in it
-    print xPosition["_id"]
-    xPosition["value"] = 30
-
+    for methodName in ["working1", "working2", "broken"]:
+        result = ddpc.method(methodName, ["work work work"]);
+        print ddpc.getResult(result)
+        time.sleep(1)
+    time.sleep(5)
+    
     ddpc.close(reason="Its not you, its me.")
 
