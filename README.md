@@ -1,4 +1,4 @@
 meteor-ddp-method-clobber
 =========================
 
-Yay. :/
+Attempt to demonstrate a Meteor.methods bug that I can no longer make work.
